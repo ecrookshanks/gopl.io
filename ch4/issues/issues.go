@@ -11,6 +11,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"time"
 
 	"gopl.io/ch4/github"
 )
@@ -23,9 +24,22 @@ func main() {
 	}
 	fmt.Printf("%d issues:\n", result.TotalCount)
 	for _, item := range result.Items {
-		fmt.Printf("#%-5d %9.9s %.55s\n",
-			item.Number, item.User.Login, item.Title)
+		fmt.Printf("#%-5d %9.9s %.55s %s\n",
+			item.Number, item.User.Login, item.Title, daysAgo(item.CreatedAt))
 	}
+}
+
+func daysAgo(t time.Time) string {
+	days := int(time.Since(t).Hours() / 24)
+
+	if days < 31 {
+		return "Less than 30 days old"
+	}
+
+	if days < 366 {
+		return "Less than a year old"
+	}
+	return "More than a year old"
 }
 
 //!-
